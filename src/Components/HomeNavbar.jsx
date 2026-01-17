@@ -121,6 +121,14 @@ function HomeNavbar({ productRef }) {
           >
              Profile
           </button>
+          <button
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={() => navigate("/Cart")} // ✅ Correct way
+          >
+             Cart
+          </button>
         </div>
       </div>
     </nav>
