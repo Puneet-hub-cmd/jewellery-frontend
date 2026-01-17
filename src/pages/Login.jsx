@@ -1,7 +1,42 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 function Login() {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:2000/login", {
+        email,
+        password,
+      });
+
+      setMessage(res.data.message);
+
+      // Token localStorage me save
+      localStorage.setItem("token", res.data.token);
+
+      // Login success → redirect to dashboard or home
+      if (res.status === 200) {
+        setTimeout(() => {
+          navigate("/Home"); // ya apna route
+        }, 1000);
+      }
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Error occurred");
+    }
+  };
+
   return (
     <div
-      className="min-h-screen bg-fixed bg-cover flex items-center justify-center bg-cover bg-center"
+      className="min-h-screen bg-fixed bg-cover flex items-center justify-center bg-cover bg-center relative"
       style={{
         backgroundImage:
           "url('https://thumbs.dreamstime.com/b/sparkling-diamonds-background-luxury-diamond-jewelry-illustration-shimmering-gems-reflecting-light-precious-stones-glitter-384870969.jpg')",
@@ -29,11 +64,13 @@ function Login() {
         <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
           Welcome Back 👋
         </h2>
-        <p className="text-gray-500 text-center mb-8">
-          Login to continue
-        </p>
+        <p className="text-gray-800 text-center mb-4">Login to continue</p>
 
-        <form className="space-y-6">
+        {message && (
+          <p className="text-center text-red-600 mb-4">{message}</p>
+        )}
+
+        <form className="space-y-6" onSubmit={handleLogin}>
           {/* Email */}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
@@ -42,7 +79,10 @@ function Login() {
             <input
               type="email"
               placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -54,7 +94,10 @@ function Login() {
             <input
               type="password"
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -66,7 +109,7 @@ function Login() {
               />
               <span className="ml-2">Remember me</span>
             </label>
-            <a href="#" className="text-blue-600 hover:underline">
+            <a href="#" className="text-red-600 hover:underline">
               Forgot password?
             </a>
           </div>
