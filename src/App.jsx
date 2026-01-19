@@ -7,6 +7,7 @@ import "./index.css";
 import About from "./pages/About";
 import Profile from "./pages/Profile.jsx";
 import Product from "./pages/Product.jsx";
+import Cart from "./pages/Cart.jsx";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Product" element={<Product />} />
+        <Route path="/Cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   );

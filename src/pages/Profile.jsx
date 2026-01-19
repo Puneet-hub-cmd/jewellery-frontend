@@ -14,24 +14,19 @@ const Profile = () => {
     try {
       const res = await axios.get("http://localhost:2000/api/profile", {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ FIXED
+          Authorization: `Bearer ${token}`,
         },
       });
 
       setUser(res.data);
       setFormData(res.data);
     } catch (err) {
-      console.error(
-        "Error fetching profile:",
-        err.response?.data?.message || err.message
-      );
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    if (token) {
-      fetchProfile();
-    }
+    if (token) fetchProfile();
   }, [token]);
 
   // ================= HANDLE INPUT =================
@@ -48,29 +43,26 @@ const Profile = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ FIXED
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       setUser(res.data);
       setEditing(false);
-      alert("Profile updated successfully!");
+      alert("Profile updated successfully");
     } catch (err) {
-      console.error(
-        "Error updating profile:",
-        err.response?.data?.message || err.message
-      );
-      alert("Profile update failed!");
+      alert("Update failed");
     }
   };
 
-  if (!user)
+  if (!user) {
     return (
       <p style={{ color: "white", textAlign: "center", paddingTop: "100px" }}>
         Loading...
       </p>
     );
+  }
 
   return (
     <div
@@ -78,42 +70,38 @@ const Profile = () => {
         minHeight: "100vh",
         background: "#1F2937",
         color: "white",
-        fontFamily: "sans-serif",
       }}
     >
-      {/* Navbar only for Profile */}
-      <div style={{ backgroundColor: "#1F2937" }}>
-        <HomeNavbar />
-      </div>
+      {/* ✅ FIXED NAVBAR */}
+      <HomeNavbar />
 
-      <div
-        style={{
-          maxWidth: "500px",
-          margin: "100px auto",
-          padding: "20px",
-          background: "#374151",
-          borderRadius: "10px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-        }}
-      >
-        <h2
+      {/* ✅ SPACE FOR FIXED NAVBAR */}
+      <div style={{ paddingTop: "90px" }}>
+        <div
           style={{
-            textAlign: "center",
-            marginBottom: "20px",
-            color: "#FACC15",
-            fontSize: "2rem",
+            maxWidth: "500px",
+            margin: "0 auto",
+            padding: "20px",
+            background: "#374151",
+            borderRadius: "10px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
           }}
         >
-          My Profile
-        </h2>
+          <h2
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+              color: "#FACC15",
+            }}
+          >
+            My Profile
+          </h2>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <label>
-            Name:
+            Name
             <input
               type="text"
               name="name"
-              autoComplete="name"
               value={editing ? formData.name : user.name}
               onChange={handleChange}
               disabled={!editing}
@@ -122,11 +110,9 @@ const Profile = () => {
           </label>
 
           <label>
-            Email:
+            Email
             <input
               type="email"
-              name="email"
-              autoComplete="email"
               value={user.email}
               disabled
               style={inputStyle}
@@ -134,11 +120,10 @@ const Profile = () => {
           </label>
 
           <label>
-            Phone:
+            Phone
             <input
               type="text"
               name="phone"
-              autoComplete="tel"
               value={editing ? formData.phone || "" : user.phone || ""}
               onChange={handleChange}
               disabled={!editing}
@@ -147,11 +132,10 @@ const Profile = () => {
           </label>
 
           <label>
-            Address:
+            Address
             <input
               type="text"
               name="address"
-              autoComplete="street-address"
               value={editing ? formData.address || "" : user.address || ""}
               onChange={handleChange}
               disabled={!editing}
@@ -160,14 +144,11 @@ const Profile = () => {
           </label>
 
           {editing ? (
-            <button onClick={handleSave} style={buttonStyleSave}>
+            <button onClick={handleSave} style={saveBtn}>
               Save
             </button>
           ) : (
-            <button
-              onClick={() => setEditing(true)}
-              style={buttonStyleEdit}
-            >
+            <button onClick={() => setEditing(true)} style={editBtn}>
               Edit Profile
             </button>
           )}
@@ -181,23 +162,24 @@ const Profile = () => {
 const inputStyle = {
   width: "100%",
   padding: "10px",
-  marginTop: "5px",
+  margin: "8px 0 15px",
   borderRadius: "5px",
   border: "1px solid #ccc",
   background: "#1F2937",
   color: "white",
 };
 
-const buttonStyleEdit = {
+const editBtn = {
+  width: "100%",
   padding: "10px",
   background: "#FACC15",
-  color: "#111827",
   border: "none",
   borderRadius: "5px",
   cursor: "pointer",
 };
 
-const buttonStyleSave = {
+const saveBtn = {
+  width: "100%",
   padding: "10px",
   background: "#4CAF50",
   color: "white",

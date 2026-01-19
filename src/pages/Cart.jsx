@@ -1,29 +1,55 @@
-function Cart({ cartItems }) {
-  const totalAmount = cartItems.reduce(
-    (total, item) => total + item.price * (item.quantity || 1),
-    0
-  );
+import { useEffect, useState } from "react";
+import axios from "axios";
+import HomeNavbar from "../Components/HomeNavbar";
+
+function Cart() {
+  const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get("http://localhost:2000/api/cart", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCart(res.data);
+    };
+
+    fetchCart();
+  }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>My Cart</h1>
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty</p>
-      ) : (
-        cartItems.map((item) => (
-          <div key={item.id} style={{ display: "flex", gap: "10px", border: "1px solid gray", padding: "10px", marginBottom: "10px" }}>
-            <img src={item.image} alt={item.name} style={{ width: "100px", height: "100px" }} />
-            <div>
-              <h2>{item.name}</h2>
-              <p>Type: {item.type}</p>
-              <p>Weight: {item.weight}g</p>
-              <p>Price: ₹{item.price}</p>
-              <p>Quantity: {item.quantity}</p>
-            </div>
-          </div>
-        ))
+    <div style={{ minHeight: "100vh", background: "#1F2937", color: "white" }}>
+      <HomeNavbar />
+      <h1 style={{ textAlign: "center", margin: "1rem" }}>My Cart 🛒</h1>
+
+      {cart.length === 0 && (
+        <p style={{ textAlign: "center" }}>Cart empty hai</p>
       )}
-      <h2>Total: ₹{totalAmount}</h2>
+
+      {cart.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            display: "flex",
+            gap: "20px",
+            padding: "15px",
+            margin: "10px auto",
+            width: "40%",
+            border: "1px solid #555",
+          }}
+        >
+          <img src={item.image} width="80" />
+          <div>
+            <h3>{item.name}</h3>
+            <p>₹{item.price}</p>
+            <p>Qty: {item.quantity}</p>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
