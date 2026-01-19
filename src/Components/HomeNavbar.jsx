@@ -1,53 +1,38 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function HomeNavbar({ productRef }) {
   const navigate = useNavigate();
-  
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Scroll to Products safely
-  const handleProductClick = () => {
-    productRef?.current?.scrollIntoView({ behavior: "smooth" });
+  const handleNavigate = (path) => {
+    navigate(path);
+    setMenuOpen(false); // mobile menu close
   };
 
-  const buttonStyle = {
+  const navButton = {
     color: "white",
     background: "transparent",
     border: "none",
     cursor: "pointer",
     fontWeight: "600",
     fontSize: "16px",
-    padding: "6px 12px",
-    transition: "all 0.3s ease",
-  };
-
-  const buttonHover = {
-    color: "#FACC15",
-    textShadow: "0 0 8px #FACC15",
-  };
-
-  const handleMouseEnter = (e) => {
-    Object.assign(e.target.style, buttonHover);
-  };
-
-  const handleMouseLeave = (e) => {
-    Object.assign(e.target.style, {
-      color: "white",
-      textShadow: "none",
-    });
+    padding: "10px",
   };
 
   return (
     <nav
       style={{
-        position: "absolute",
+        position: "fixed",
         top: 0,
         left: 0,
         width: "100%",
-        zIndex: 50,
-        background: "transparent",
+        zIndex: 9999,
+        background: "rgba(17,24,39,0.95)",
+        backdropFilter: "blur(6px)",
       }}
     >
+      {/* ===== TOP BAR ===== */}
       <div
         style={{
           maxWidth: "1280px",
@@ -55,82 +40,85 @@ function HomeNavbar({ productRef }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "20px",
+          padding: "16px 20px",
         }}
       >
         {/* Logo */}
         <h1
           style={{
             color: "#FACC15",
-            fontSize: "24px",
+            fontSize: "22px",
             fontWeight: "bold",
             cursor: "pointer",
           }}
-          onClick={() =>
-            window.scrollTo({ top: 0, behavior: "smooth" })
-          }
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           Jewellery 💎
         </h1>
 
-        {/* Menu */}
-        <div style={{ display: "flex", gap: "24px" }}>
-          <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={() =>
-              navigate("/home")
-            }
-          >
-            Home
-          </button>
+        {/* ===== DESKTOP MENU ===== */}
+        <div
+          className="desktop-menu"
+          style={{
+            display: "flex",
+            gap: "24px",
+          }}
+        >
+          <button style={navButton} onClick={() => handleNavigate("/home")}>Home</button>
+          <button style={navButton} onClick={() => handleNavigate("/product")}>Products</button>
+          <button style={navButton} onClick={() => handleNavigate("/about")}>About</button>
+          <button style={navButton} onClick={() => handleNavigate("/contact")}>Contact</button>
+          <button style={navButton} onClick={() => handleNavigate("/profile")}>Profile</button>
+          <button style={navButton} onClick={() => handleNavigate("/cart")}>Cart</button>
+        </div>
 
-          <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => navigate("/Product")}
-          >
-            Products
-          </button>
-
-          <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={()=> navigate("/About")}
-          >
-            About
-          </button>
-
-          {/* Contact Button */}
-          <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => navigate("/contact")} // ✅ Correct way
-          >
-            Contact
-          </button>
-           <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => navigate("/Profile")} // ✅ Correct way
-          >
-             Profile
-          </button>
-          <button
-            style={buttonStyle}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={() => navigate("/Cart")} // ✅ Correct way
-          >
-             Cart
-          </button>
+        {/* ===== HAMBURGER (MOBILE) ===== */}
+        <div
+          className="mobile-menu-btn"
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{
+            display: "none",
+            fontSize: "26px",
+            color: "white",
+            cursor: "pointer",
+          }}
+        >
+          ☰
         </div>
       </div>
+
+      {/* ===== MOBILE DROPDOWN ===== */}
+      {menuOpen && (
+        <div
+          style={{
+            background: "#111827",
+            display: "flex",
+            flexDirection: "column",
+            padding: "10px 20px",
+          }}
+        >
+          <button style={navButton} onClick={() => handleNavigate("/home")}>Home</button>
+          <button style={navButton} onClick={() => handleNavigate("/product")}>Products</button>
+          <button style={navButton} onClick={() => handleNavigate("/about")}>About</button>
+          <button style={navButton} onClick={() => handleNavigate("/contact")}>Contact</button>
+          <button style={navButton} onClick={() => handleNavigate("/profile")}>Profile</button>
+          <button style={navButton} onClick={() => handleNavigate("/cart")}>Cart</button>
+        </div>
+      )}
+
+      {/* ===== RESPONSIVE CSS ===== */}
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .desktop-menu {
+              display: none;
+            }
+            .mobile-menu-btn {
+              display: block;
+            }
+          }
+        `}
+      </style>
     </nav>
   );
 }

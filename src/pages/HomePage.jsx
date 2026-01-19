@@ -6,7 +6,34 @@ import HomeNavbar from "../Components/HomeNavbar.jsx";
 function HomePage() {
   const [jewellery, setJewellery] = useState([]);
 
-  // 🔥 Fetch products from backend
+  // ================= ADD TO CART =================
+  const addToCart = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Login required");
+        return;
+      }
+
+      const res = await axios.post(
+        "http://localhost:2000/api/cart/add",
+        { productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(res.data.message);
+    } catch (err) {
+      console.error("Add to cart error:", err.response?.data || err.message);
+      alert("Something went wrong");
+    }
+  };
+
+  // ================= FETCH PRODUCTS =================
   useEffect(() => {
     axios
       .get("http://localhost:2000/api/jewellery")
@@ -20,14 +47,14 @@ function HomePage() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>
-      
       {/* ✅ Navbar */}
       <HomeNavbar />
 
       {/* ✅ Hero Section */}
       <section
         style={{
-          height: "220px",
+          marginTop: "80px",
+          height: "200px",
           background: "linear-gradient(to right, #81a6e7ff, #fca5a5)",
           display: "flex",
           alignItems: "center",
@@ -62,11 +89,13 @@ function HomePage() {
           {jewellery.slice(0, 4).map((item) => (
             <JewelleryCard
               key={item.id}
+              id={item.id}                 // 🔥 IMPORTANT
               image={item.image}
               name={item.name}
               weight={item.weight}
               price={item.price}
               type={item.type}
+              addToCart={addToCart}       // 🔥 THIS WAS MISSING
             />
           ))}
         </div>
