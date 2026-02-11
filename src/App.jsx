@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Profile from "./pages/Profile.jsx";
 import Product from "./pages/Product.jsx";
 import Cart from "./pages/Cart.jsx";
+import Chekout from "./pages/Chekout.jsx";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Product" element={<Product />} />
         <Route path="/Cart" element={<Cart />} />
+        <Route path="/Chekout" element={<Chekout />} />
       </Routes>
     </BrowserRouter>
   );

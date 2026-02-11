@@ -160,7 +160,7 @@ const Profile = () => {
 
 // ================= STYLES =================
 const inputStyle = {
-  width: "100%",
+  width: "96%",
   padding: "10px",
   margin: "8px 0 15px",
   borderRadius: "5px",
