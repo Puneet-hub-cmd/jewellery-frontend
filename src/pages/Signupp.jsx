@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImage from "../assets/images/onebg.webp";
+import bgImage from "../assets/Images/onebg.webp";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
