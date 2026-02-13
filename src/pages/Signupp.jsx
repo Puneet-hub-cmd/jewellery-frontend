@@ -16,7 +16,7 @@ function Signupp() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:2000/signup", {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
         name,
         email,
         password,
